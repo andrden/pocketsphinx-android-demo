@@ -2,17 +2,20 @@ package edu.cmu.pocketsphinx.demo;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 
 import java.util.Collection;
 import java.util.HashMap;
 
 public class Sounds {
+    Context context;
     SoundPool soundPool;
     HashMap<Integer, Integer> soundPoolMap;
     AudioManager audioManager;
 
     private Sounds(Context context){
+        this.context = context;
         audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
         soundPoolMap = new HashMap<Integer, Integer>();
@@ -30,6 +33,13 @@ public class Sounds {
         for( int i : preloadResIds){
             soundPoolMap.put(i, soundPool.load(context, i, 1));
         }
+    }
+
+    long getSoundDuration(int rawId){
+        MediaPlayer player = MediaPlayer.create(context, rawId);
+        int duration = player.getDuration();
+        player.release();
+        return duration;
     }
 
     void sound(int resId){

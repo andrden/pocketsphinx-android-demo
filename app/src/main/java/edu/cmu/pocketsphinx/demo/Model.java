@@ -21,6 +21,7 @@ public class Model {
     String day = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US);
 
     Map<String,String> ttsResponses = new HashMap<String,String>(){{
+       put("hello", "Hello! How are you?");
        put("who are you", "I am a gnome");
        put("how old are you", "I am two");
        put("today is", "Today is "+day);
