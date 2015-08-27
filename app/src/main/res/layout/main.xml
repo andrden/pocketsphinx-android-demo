@@ -4,33 +4,33 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:padding="16dp" >
+        <TextView
+            android:id="@+id/caption_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:typeface="sans" />
 
-    <TextView
-        android:id="@+id/caption_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:typeface="sans" />
-
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView android:id="@+id/txtScroll"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center" >
+        android:layout_height="wrap_content"
+        android:maxLines = "3"
+        android:scrollbars = "vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
 
         <TextView
             android:id="@+id/result_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/holo_blue_dark"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView android:id="@+id/counter"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/holo_orange_light"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
-    </LinearLayout>
 </LinearLayout>

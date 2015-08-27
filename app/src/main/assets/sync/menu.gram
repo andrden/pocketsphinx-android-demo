@@ -4,4 +4,6 @@ grammar menu;
 
 public <item> =
     who are you | who gave you | who are few | are you | do you |
-    how old are you | how bad are you | how can you | how old are they | how old were you ;
+    how old are you | how bad are you | how can you | how old are they | how old were you |
+    make a crow call | crow like a rooster | say something in russian | today is
+    ;

@@ -42,6 +42,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 import android.widget.Toast;
 import edu.cmu.pocketsphinx.Assets;
@@ -65,6 +66,7 @@ public class PocketSphinxActivity extends Activity implements
     private SpeechRecognizer recognizer;
     //private HashMap<String, Integer> captions;
 
+    Model model;
     TextToSpeech tts;
     Sounds sounds;
     int count = 0;
@@ -73,24 +75,24 @@ public class PocketSphinxActivity extends Activity implements
     public void onCreate(Bundle state) {
         super.onCreate(state);
 
-        sounds = new Sounds(this, new int[]{R.raw.iamgnome});
+        sounds = new Sounds(this, Model.soundResponses.values());
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
             }
         });
         tts.setLanguage(Locale.US);
+        tts.setPitch(0.6f);
+        tts.setSpeechRate(0.3f);
+        model = new Model(tts, sounds);
 
-        // Prepare the data for UI
-//        captions = new HashMap<String, Integer>();
-//        //captions.put(KWS_SEARCH, R.string.kws_caption);
-//        captions.put(MENU_SEARCH, R.string.menu_caption);
-//        captions.put(DIGITS_SEARCH, R.string.digits_caption);
-//        captions.put(PHONE_SEARCH, R.string.phone_caption);
-//        captions.put(FORECAST_SEARCH, R.string.forecast_caption);
         setContentView(R.layout.main);
         ((TextView) findViewById(R.id.caption_text))
                 .setText("Preparing the recognizer");
+
+        TextView txtScroll = (TextView) findViewById(R.id.txtScroll);
+        txtScroll.setMovementMethod(new ScrollingMovementMethod());
+        txtScroll.setText(model.allPhrases().toString());
 
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
@@ -138,16 +140,11 @@ public class PocketSphinxActivity extends Activity implements
     	    return;
 
         String text = hypothesis.getHypstr();
-        if (text.equals("who are you") || text.equals("how old are you")) {
-            //switchSearch(MENU_SEARCH);
+        if (model.allPhrases().contains(text)) {
+            recognizer.stop();
             wordSaid(text);
             switchSearch(MENU_SEARCH);
-        } /*else if (text.equals(DIGITS_SEARCH))
-            switchSearch(DIGITS_SEARCH);
-        else if (text.equals(PHONE_SEARCH))
-            switchSearch(PHONE_SEARCH);
-        else if (text.equals(FORECAST_SEARCH))
-            switchSearch(FORECAST_SEARCH); */
+        }
         else
             ((TextView) findViewById(R.id.result_text)).setText(text);
     }
@@ -155,13 +152,7 @@ public class PocketSphinxActivity extends Activity implements
     void wordSaid(String text){
         count++;
         ((TextView)findViewById(R.id.counter)).setText("c=" + count);
-        if (text.equals("who are you") ) {
-            tts.speak("I am a gnome", TextToSpeech.QUEUE_FLUSH, null);
-        } else if (text.equals("how old are you")) {
-            tts.speak("I am two", TextToSpeech.QUEUE_FLUSH, null);
-        }
-        //sounds.sound(R.raw.iamgnome);
-
+        model.wordSaid(text);
     }
 
     /**
@@ -199,7 +190,7 @@ public class PocketSphinxActivity extends Activity implements
 //            recognizer.startListening(searchName, 10000);
 
        // String caption = getResources().getString(captions.get(searchName));
-        ((TextView) findViewById(R.id.caption_text)).setText("say: who are you?");
+        ((TextView) findViewById(R.id.caption_text)).setText("Say any of the following:");
     }
 
     private void setupRecognizer(File assetsDir) throws IOException {
