@@ -140,12 +140,12 @@ public class PocketSphinxActivity extends Activity implements
     	    return;
 
         String text = hypothesis.getHypstr();
-        if (model.allPhrases().contains(text)) {
-            recognizer.stop();
-            wordSaid(text);
-            switchSearch(MENU_SEARCH);
-        }
-        else
+//        if (model.allPhrases().contains(text)) {
+//            recognizer.stop();
+//            wordSaid(text);
+//            switchSearch(MENU_SEARCH);
+//        }
+//        else
             ((TextView) findViewById(R.id.result_text)).setText(text);
     }
 
@@ -164,6 +164,13 @@ public class PocketSphinxActivity extends Activity implements
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
             makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+
+            if (model.allPhrases().contains(text)) {
+                recognizer.stop();
+                wordSaid(text);
+                switchSearch(MENU_SEARCH);
+            }
+
         }
     }
 
